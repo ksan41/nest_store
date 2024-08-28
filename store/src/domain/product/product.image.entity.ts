@@ -1,6 +1,7 @@
-import { Column, CreateDateColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { ProductEntity } from './product.entity';
 
+@Entity({ name: 'product_image' })
 export class ProductImage {
   @PrimaryGeneratedColumn({ name: 'image_id' })
   id: number;
