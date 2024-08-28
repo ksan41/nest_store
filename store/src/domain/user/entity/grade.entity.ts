@@ -5,12 +5,13 @@ export class GradeEntity {
   @PrimaryGeneratedColumn({
     name: 'grade_id',
   })
-  id: number;
+  private id: number;
 
   @Column({ name: 'grade_name' })
-  name: string;
+  private name: string;
+
   @Column({ name: 'purchase_count' })
-  purchaseCount: number;
+  private purchaseCount: number;
   @Column({ name: 'rate_discount' })
-  rateDiscount: number;
+  private rateDiscount: number;
 }

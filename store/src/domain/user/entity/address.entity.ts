@@ -4,27 +4,31 @@ import { UserEntity } from './user.entity';
 @Entity({ name: 'address' })
 export class Address {
   @PrimaryGeneratedColumn({ name: 'address_id' })
-  id: number;
+  private id: number;
 
   @Column()
-  address1: string;
+  private address1: string;
 
   @Column()
-  address2: string;
+  private address2: string;
 
   @Column({ name: 'zip_code' })
-  zipCode: string;
+  private zipCode: string;
 
   @Column()
-  alias: string;
+  private alias: string;
 
   @Column({
     name: 'is_default',
     type: 'boolean',
     default: false,
   })
-  isDefault: boolean;
+  private isDefault: boolean;
 
   @ManyToOne(() => UserEntity, user => user.addresses)
-  user: UserEntity;
+  private _user: UserEntity;
+
+  get user(): UserEntity {
+    return this._user;
+  }
 }
