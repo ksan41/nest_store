@@ -1,9 +1,10 @@
-import { Column, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, ManyToMany, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { ProductState } from './vo/e.product.state';
 import { ProductImage } from './product.image.entity';
 import { ProductInfo } from './vo/product.info';
 import { Category } from './category.entity';
 
+@Entity({ name: 'product' })
 export class ProductEntity {
   @PrimaryGeneratedColumn({ name: 'product_id' })
   id: number;
@@ -11,8 +12,7 @@ export class ProductEntity {
   @Column(() => ProductInfo, { prefix: false })
   info: ProductInfo;
 
-  @ManyToMany(() => Category)
-  @JoinTable()
+  @ManyToMany(() => Category, category => category.products)
   categories: Category[];
 
   @Column({
