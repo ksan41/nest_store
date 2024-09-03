@@ -1,8 +1,8 @@
 import { Column, Entity, ManyToMany, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
-import { ProductState } from './vo/e.product.state';
 import { ProductImage } from './product.image.entity';
-import { ProductInfo } from './vo/product.info';
 import { Category } from './category.entity';
+import { ProductInfo } from '../vo/product.info';
+import { ProductState } from '../vo/e.product.state';
 
 @Entity({ name: 'product' })
 export class ProductEntity {
