@@ -11,8 +11,11 @@ export class UserService {
     this.userRepository = AppDataSource.getRepository(UserEntity);
   }
 
-  async getOneByUserId(userId: string) {
-    return await this.userRepository.findOneBy({ id: userId });
+  async getOneByUserId(userId: string): Promise<ViewUserDto> {
+    const user = await this.userRepository.findOneBy({ id: userId });
+    return plainToInstance(ViewUserDto, user, {
+      excludeExtraneousValues: true,
+    });
   }
 
   async getAllUser(): Promise<ViewUserDto[]> {
