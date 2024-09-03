@@ -1,5 +1,7 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpException, Param, Patch, Post } from '@nestjs/common';
 import { UserService } from '../service/user.service';
+import { CreateUserDto, UpdateUserDto } from '../dto/user.dto';
+import { DuplecatedException } from 'src/common/ custom.exceptions';
 
 @Controller('user')
 export class UserController {
@@ -7,11 +9,11 @@ export class UserController {
 
   @Get()
   getAll() {
-    return this.userService.getAll();
+    return this.userService.getAllUser();
   }
 
   @Get(':id')
   getOne(@Param('id') userId: string) {
-    return this.userService.getOne(userId);
+    return this.userService.getOneByUserId(userId);
   }
 }

@@ -2,6 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { UserEntity } from '../entity/user.entity';
 import { AppDataSource } from 'src/config/data.source';
+import { plainToInstance } from 'class-transformer';
+import { ViewUserDto } from '../dto/view.user.dto';
 
 @Injectable()
 export class UserService {
@@ -9,11 +11,14 @@ export class UserService {
     this.userRepository = AppDataSource.getRepository(UserEntity);
   }
 
-  getOne(userId: string) {
-    return this.userRepository.findOneById(userId);
+  async getOneByUserId(userId: string) {
+    return await this.userRepository.findOneBy({ id: userId });
   }
 
-  getAll() {
-    return this.userRepository.find();
+  async getAllUser(): Promise<ViewUserDto[]> {
+    const users = await this.userRepository.find();
+    return plainToInstance(ViewUserDto, users, {
+      excludeExtraneousValues: true,
+    });
   }
 }
