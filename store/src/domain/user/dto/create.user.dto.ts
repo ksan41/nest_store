@@ -1,4 +1,4 @@
-import { ApiProperty, PartialType } from '@nestjs/swagger';
+import { ApiProperty, OmitType, PartialType } from '@nestjs/swagger';
 import { UserEntity } from '../entity/user.entity';
 import { UserInfo } from '../vo/user.info';
 import { Address } from '../entity/address.entity';
@@ -14,5 +14,5 @@ export class CreateUserDto extends PartialType(UserEntity) {
   gradeId: number;
 
   @ApiProperty()
-  address: Address;
+  addresses: Address[];
 }

@@ -1,4 +1,4 @@
-import { BaseEntity, BeforeInsert, Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryColumn } from 'typeorm';
+import { BaseEntity, Column, Entity, JoinColumn, JoinTable, ManyToOne, OneToMany, PrimaryColumn } from 'typeorm';
 import { UserInfo } from '../vo/user.info';
 import { Address } from './address.entity';
 import { GradeEntity } from './grade.entity';
@@ -26,6 +26,7 @@ export class UserEntity extends BaseEntity {
   @JoinColumn({ name: 'grade_id' })
   grade: GradeEntity;
 
-  @OneToMany(() => Address, address => address.user)
+  @OneToMany(() => Address, address => address.user, { cascade: true })
+  @JoinTable()
   addresses: Address[];
 }
