@@ -29,11 +29,4 @@ export class UserEntity extends BaseEntity {
 
   @OneToMany(() => Address, address => address.user)
   addresses: Address[];
-
-  @Column({
-    type: 'enum',
-    enum: UserState,
-    default: UserState.ENABLE,
-  })
-  state: UserState;
 }
