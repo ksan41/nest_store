@@ -1,12 +1,12 @@
 import { Module } from '@nestjs/common';
 import { UserController } from './controller/user.controller';
 import { UserService } from './service/user.service';
-import { UserEntity } from './entity/user.entity';
+import { ShaEncryptionService } from './service/sha-encryption.service';
 import { Repository } from 'typeorm';
-import { GradeEntity } from './entity/grade.entity';
+import { UserEntity } from './entity/user.entity';
 
 @Module({
   controllers: [UserController],
-  providers: [UserService, Repository<UserEntity>, Repository<GradeEntity>],
+  providers: [UserService, ShaEncryptionService, Repository<UserEntity>],
 })
 export class UserModule {}

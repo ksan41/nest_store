@@ -1,7 +1,8 @@
 import { Body, Controller, Delete, Get, HttpException, Param, Patch, Post } from '@nestjs/common';
 import { UserService } from '../service/user.service';
-import { CreateUserDto, UpdateUserDto } from '../dto/user.dto';
-import { DuplecatedException } from 'src/common/ custom.exceptions';
+import { CreateUserDto } from '../dto/create.user.dto';
+import { DuplecatedException, ExceptionMessage } from 'src/common/ custom.exceptions';
+import { UpdateUserDto } from '../dto/update.user.dto';
 
 @Controller('user')
 export class UserController {
@@ -15,5 +16,10 @@ export class UserController {
   @Get(':id')
   getOne(@Param('id') userId: string) {
     return this.userService.getOneByUserId(userId);
+  }
+
+  @Post()
+  createUser(@Body() user: CreateUserDto) {
+    return this.userService.createUser(user);
   }
 }
