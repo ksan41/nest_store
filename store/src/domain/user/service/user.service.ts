@@ -29,6 +29,10 @@ export class UserService {
     });
   }
 
+  async removeUser(removeUserId: string) {
+    await this.userRepository.softDelete({ id: removeUserId });
+  }
+
   async getOneByUserId(userId: string): Promise<ViewUserDto> {
     const user = await this.userRepository.findOneBy({ id: userId });
     return plainToInstance(ViewUserDto, user, {
