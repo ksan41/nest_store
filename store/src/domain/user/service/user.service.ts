@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { UserEntity } from '../entity/user.entity';
 import { ShaEncryptionService } from './sha-encryption.service';
@@ -6,7 +6,9 @@ import { CreateUserDto } from '../dto/create.user.dto';
 import { AppDataSource } from 'src/config/data.source';
 import { plainToInstance } from 'class-transformer';
 import { ViewUserDto } from '../dto/view.user.dto';
+import { UpdateUserDto } from '../dto/update.user.dto';
 import { DuplecatedException, ExceptionMessage } from 'src/common/ custom.exceptions';
+import { TypeCheck } from 'src/common/util/type.check.service';
 
 @Injectable()
 export class UserService {
@@ -20,11 +22,23 @@ export class UserService {
   async createUser(newUser: CreateUserDto) {
     return await this.isDuplicate(newUser.id).then(res => {
       if (!res) {
-        const encryptPw = this.encryptService.encrypt(newUser.info.password);
-        newUser.info.password = encryptPw;
+        newUser.info.password = this.passwordEncrypt(newUser.info.password);
         this.userRepository.save(newUser);
       } else {
         throw new DuplecatedException(ExceptionMessage.USER_DUPLICATED);
+      }
+    });
+  }
+
+  async modifyUserInfo(updateUserId: string, updateUser: UpdateUserDto) {
+    await this.getOneByUserId(updateUserId).then(res => {
+      if (TypeCheck.isEmpty(res)) {
+        throw new NotFoundException(ExceptionMessage.USER_NOT_FOUND);
+      } else {
+        if (!TypeCheck.isEmpty(updateUser.info.password)) {
+          updateUser.info.password = this.passwordEncrypt(updateUser.info.password);
+        }
+        this.userRepository.update({ id: updateUserId }, { info: updateUser.info });
       }
     });
   }
@@ -55,5 +69,9 @@ export class UserService {
         return false;
       }
     });
+  }
+
+  private passwordEncrypt(plainPassword: string) {
+    return this.encryptService.encrypt(plainPassword);
   }
 }
