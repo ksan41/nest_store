@@ -1,5 +1,4 @@
 import { Expose, Type } from 'class-transformer';
-import { UserState } from '../vo/e.user.state';
 import { OmitType } from '@nestjs/swagger';
 import { UserInfo } from '../vo/user.info';
 
@@ -24,7 +23,4 @@ export class ViewUserDto {
   @Expose()
   @Type()
   info: ViewUserInfoDto;
-
-  @Expose()
-  state: UserState;
 }

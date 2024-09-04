@@ -1,6 +1,5 @@
 import { BaseEntity, BeforeInsert, Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryColumn } from 'typeorm';
 import { UserInfo } from '../vo/user.info';
-import { UserState } from '../vo/e.user.state';
 import { Address } from './address.entity';
 import { GradeEntity } from './grade.entity';
 import { UserRole } from '../vo/e.user.role';
