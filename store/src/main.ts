@@ -1,18 +1,12 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { AppDataSource } from './config/data.source';
+import { ConfigService } from '@nestjs/config';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  await app.listen(3000);
+  // app.use(cookieParser());
+  const configService = app.get(ConfigService);
+  const port = configService.get('http.port');
+  await app.listen(port);
 }
-bootstrap().then(() => {
-  AppDataSource.initialize()
-    .then(() => {
-      console.log('Data Source has been initialized!');
-      // here you can start to work with your database
-    })
-    .catch(err => {
-      console.error('Error during Data Source initialization', err);
-    });
-});
+bootstrap();
