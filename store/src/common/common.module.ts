@@ -4,5 +4,6 @@ import { Base64StringService } from './util/base64.string.service';
 
 @Module({
   providers: [ShaEncryptionService, Base64StringService],
+  exports: [ShaEncryptionService, Base64StringService],
 })
 export class CommonModule {}

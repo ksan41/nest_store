@@ -19,6 +19,8 @@ export class IncorrectValueException extends BadRequestException {
 }
 
 export enum ExceptionMessage {
+  INVALID_USER_INFO = '사용자 아이디 혹은 비밀번호가 일치하지 않습니다.',
+
   USER_DUPLICATED = '중복된 사용자 아이디 입니다.',
   USER_NOT_FOUND = '사용자 정보를 찾을 수 없었습니다.',
 

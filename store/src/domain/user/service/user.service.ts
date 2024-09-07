@@ -1,23 +1,21 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { Repository } from 'typeorm';
+import { DataSource, Repository } from 'typeorm';
 import { UserEntity } from '../entity/user.entity';
 import { ShaEncryptionService } from '../../../common/util/sha-encryption.service';
 import { CreateUserDto } from '../dto/create.user.dto';
-import { AppDataSource } from 'src/config/data.source';
 import { plainToInstance } from 'class-transformer';
 import { ViewUserDto } from '../dto/view.user.dto';
 import { UpdateUserDto } from '../dto/update.user.dto';
 import { DuplecatedException, ExceptionMessage } from 'src/common/ custom.exceptions';
 import { TypeCheck } from 'src/common/util/type.check.service';
+import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class UserService {
   constructor(
-    private userRepository: Repository<UserEntity>,
-    private encryptService: ShaEncryptionService,
-  ) {
-    this.userRepository = AppDataSource.getRepository(UserEntity);
-  }
+    @InjectRepository(UserEntity) private readonly userRepository: Repository<UserEntity>,
+    private readonly encryptService: ShaEncryptionService,
+  ) {}
 
   async createUser(newUser: CreateUserDto) {
     return await this.isDuplicate(newUser.id).then(res => {
@@ -31,7 +29,7 @@ export class UserService {
   }
 
   async modifyUserInfo(updateUserId: string, updateUser: UpdateUserDto) {
-    await this.getOneByUserId(updateUserId).then(res => {
+    await this.getOneUser(updateUserId).then(res => {
       if (TypeCheck.isEmpty(res)) {
         throw new NotFoundException(ExceptionMessage.USER_NOT_FOUND);
       } else {
@@ -47,11 +45,8 @@ export class UserService {
     await this.userRepository.softDelete({ id: removeUserId });
   }
 
-  async getOneByUserId(userId: string): Promise<ViewUserDto> {
-    const user = await this.userRepository.findOneBy({ id: userId });
-    return plainToInstance(ViewUserDto, user, {
-      excludeExtraneousValues: true,
-    });
+  async getOneUser(userId: string): Promise<UserEntity> {
+    return await this.userRepository.findOneBy({ id: userId });
   }
 
   async getAllUser(): Promise<ViewUserDto[]> {
