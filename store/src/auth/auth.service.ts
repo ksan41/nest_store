@@ -20,19 +20,21 @@ export class AuthService {
 
   async signIn(id: string, password: string) {
     const loadUser = await this.userService.getOneUser(id);
+
     if (TypeCheck.isEmpty(loadUser)) throw new NotFoundException(ExceptionMessage.USER_NOT_FOUND);
     else {
       if (this.isPasswordCorrect(password, loadUser.info.password)) {
-        const payload = { sub: loadUser.id, username: loadUser.info.userName };
+        const payload = { sub: loadUser.id, username: loadUser.info.userName, role: loadUser.role };
         const secret = this.configService.get(authConstants.secret);
         const expiryTime = this.configService.get(authConstants.expiryTime);
 
-        return {
-          access_token: this.jwtServcie.signAsync(payload, {
+        const token = {
+          access_token: await this.jwtServcie.signAsync(payload, {
             secret: secret,
             expiresIn: expiryTime,
           }),
         };
+        return token;
       } else throw new UnauthorizedException(ExceptionMessage.INVALID_USER_INFO);
     }
   }
