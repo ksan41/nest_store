@@ -7,6 +7,8 @@ import { Base64StringService } from 'src/common/util/base64.string.service';
 import { ShaEncryptionService } from 'src/common/util/sha-encryption.service';
 import { TypeCheck } from 'src/common/util/type.check.service';
 import { UserService } from 'src/domain/user/service/user.service';
+import { Response } from 'express';
+import { SignInDto } from './dto/sign.in.dto';
 
 @Injectable()
 export class AuthService {
@@ -18,23 +20,29 @@ export class AuthService {
     private configService: ConfigService,
   ) {}
 
-  async signIn(id: string, password: string) {
-    const loadUser = await this.userService.getOneUser(id);
+  async signIn(res: Response, signInfo: SignInDto) {
+    const loadUser = await this.userService.getOneUser(signInfo.id);
 
     if (TypeCheck.isEmpty(loadUser)) throw new NotFoundException(ExceptionMessage.USER_NOT_FOUND);
     else {
-      if (this.isPasswordCorrect(password, loadUser.info.password)) {
+      if (this.isPasswordCorrect(signInfo.password, loadUser.info.password)) {
         const payload = { sub: loadUser.id, username: loadUser.info.userName, role: loadUser.role };
         const secret = this.configService.get(authConstants.secret);
-        const expiryTime = this.configService.get(authConstants.expiryTime);
 
-        const token = {
+        const accessExt = this.configService.get(authConstants.accessExpiryTime);
+        const refreshExt = this.configService.get(authConstants.refreshExpiryTime);
+
+        const refreshToken = await this.jwtServcie.signAsync({}, { secret: secret, expiresIn: refreshExt });
+        const accessToken = {
           access_token: await this.jwtServcie.signAsync(payload, {
             secret: secret,
-            expiresIn: expiryTime,
+            expiresIn: accessExt,
           }),
         };
-        return token;
+
+        res.cookie('authorization', refreshToken, { httpOnly: true });
+        res.json(accessToken);
+        return;
       } else throw new UnauthorizedException(ExceptionMessage.INVALID_USER_INFO);
     }
   }
