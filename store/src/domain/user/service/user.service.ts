@@ -1,5 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { DataSource, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { UserEntity } from '../entity/user.entity';
 import { ShaEncryptionService } from '../../../common/util/sha-encryption.service';
 import { CreateUserDto } from '../dto/create.user.dto';
