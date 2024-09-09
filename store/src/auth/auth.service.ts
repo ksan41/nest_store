@@ -2,6 +2,7 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { ExceptionMessage, NotFoundException } from 'src/common/ custom.exceptions';
+import { authConstants } from 'src/common/constants/constants';
 import { Base64StringService } from 'src/common/util/base64.string.service';
 import { ShaEncryptionService } from 'src/common/util/sha-encryption.service';
 import { TypeCheck } from 'src/common/util/type.check.service';
@@ -23,8 +24,9 @@ export class AuthService {
     else {
       if (this.isPasswordCorrect(password, loadUser.info.password)) {
         const payload = { sub: loadUser.id, username: loadUser.info.userName };
-        const secret = this.configService.get('auth.secret');
-        const expiryTime = this.configService.get('auth.expiryTime');
+        const secret = this.configService.get(authConstants.secret);
+        const expiryTime = this.configService.get(authConstants.expiryTime);
+
         return {
           access_token: this.jwtServcie.signAsync(payload, {
             secret: secret,

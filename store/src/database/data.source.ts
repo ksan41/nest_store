@@ -1,16 +1,17 @@
 import { ConfigService } from '@nestjs/config';
 import { TypeOrmModuleAsyncOptions, TypeOrmModuleOptions } from '@nestjs/typeorm';
+import { dbConstants } from 'src/common/constants/constants';
 
 export const getTypeOrmConfig = (configService: ConfigService): TypeOrmModuleOptions => {
   return {
     type: 'mysql',
-    host: configService.get('db.host'),
-    port: configService.get('db.port'),
-    username: configService.get<string>('db.username'),
-    password: configService.get<string>('db.password'),
-    database: configService.get('db.database'),
-    synchronize: configService.get('db.synchronize'),
-    logging: configService.get('db.logging'),
+    host: configService.get(dbConstants.host),
+    port: configService.get(dbConstants.port),
+    username: configService.get<string>(dbConstants.username),
+    password: configService.get<string>(dbConstants.password),
+    database: configService.get(dbConstants.database),
+    synchronize: configService.get(dbConstants.synchronize),
+    logging: configService.get(dbConstants.logging),
     entities: [__dirname + '/../**/*.entity{.ts,.js}'],
   };
 };
