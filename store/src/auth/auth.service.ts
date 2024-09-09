@@ -40,7 +40,7 @@ export class AuthService {
           }),
         };
 
-        res.cookie('authorization', refreshToken, { httpOnly: true });
+        res.cookie(this.configService.get(authConstants.headerName), refreshToken, { httpOnly: true });
         res.json(accessToken);
         return;
       } else throw new UnauthorizedException(ExceptionMessage.INVALID_USER_INFO);
