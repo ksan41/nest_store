@@ -7,8 +7,13 @@ import { Base64StringService } from 'src/common/util/base64.string.service';
 import { ShaEncryptionService } from 'src/common/util/sha-encryption.service';
 import { TypeCheck } from 'src/common/util/type.check.service';
 import { UserService } from 'src/domain/user/service/user.service';
-import { Response } from 'express';
+import { Response, Request } from 'express';
 import { SignInDto } from './dto/sign.in.dto';
+import { PermissionEnum } from './e.permission.enum';
+import { PermissionsEntity } from './entity/permission.entity';
+import { Repository } from 'typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
+import { UserRole } from 'src/domain/user/e.user.role';
 
 @Injectable()
 export class AuthService {
@@ -18,6 +23,7 @@ export class AuthService {
     private base64Service: Base64StringService,
     private encryptionService: ShaEncryptionService,
     private configService: ConfigService,
+    @InjectRepository(PermissionsEntity) private readonly permissionRepository: Repository<PermissionsEntity>,
   ) {}
 
   async signIn(res: Response, signInfo: SignInDto) {
@@ -50,5 +56,26 @@ export class AuthService {
   private isPasswordCorrect(inputPassword: string, loadPassword: string) {
     const decodepassword = this.base64Service.decode(inputPassword);
     return this.encryptionService.match(decodepassword, loadPassword);
+  }
+
+  extractTokenFromHeader(request: Request): string | undefined {
+    const [type, token] = request.headers.authorization?.split(' ') ?? [];
+    return type === 'Bearer' ? token : undefined;
+  }
+
+  async getPayload(token: string) {
+    return await this.jwtServcie.verifyAsync(token, {
+      secret: this.configService.get(authConstants.secret),
+    });
+  }
+
+  async findPermission(role: UserRole, kind: string, crud: string) {
+    return await this.permissionRepository.findOne({
+      where: {
+        role: role,
+        kind: kind,
+        crud: PermissionEnum[crud],
+      },
+    });
   }
 }

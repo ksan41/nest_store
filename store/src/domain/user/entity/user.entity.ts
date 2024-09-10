@@ -2,7 +2,7 @@ import { BaseEntity, Column, Entity, JoinColumn, JoinTable, ManyToOne, OneToMany
 import { UserInfo } from '../vo/user.info';
 import { Address } from './address.entity';
 import { GradeEntity } from './grade.entity';
-import { UserRole } from '../vo/e.user.role';
+import { UserRole } from '../e.user.role';
 
 @Entity({ name: 'user' })
 export class UserEntity extends BaseEntity {

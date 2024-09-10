@@ -1,5 +1,4 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { Repository } from 'typeorm';
 import { UserEntity } from '../entity/user.entity';
 import { ShaEncryptionService } from '../../../common/util/sha-encryption.service';
 import { CreateUserDto } from '../dto/create.user.dto';
@@ -8,6 +7,8 @@ import { ViewUserDto } from '../dto/view.user.dto';
 import { UpdateUserDto } from '../dto/update.user.dto';
 import { DuplecatedException, ExceptionMessage } from 'src/common/ custom.exceptions';
 import { TypeCheck } from 'src/common/util/type.check.service';
+import { Base64StringService } from 'src/common/util/base64.string.service';
+import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
@@ -15,12 +16,14 @@ export class UserService {
   constructor(
     @InjectRepository(UserEntity) private readonly userRepository: Repository<UserEntity>,
     private readonly encryptService: ShaEncryptionService,
+    private readonly base64Service: Base64StringService,
   ) {}
 
   async createUser(newUser: CreateUserDto) {
     return await this.isDuplicate(newUser.id).then(res => {
       if (!res) {
-        newUser.info.password = this.passwordEncrypt(newUser.info.password);
+        const plainPassword = this.base64Service.decode(newUser.info.password);
+        newUser.info.password = this.passwordEncrypt(plainPassword);
         this.userRepository.save(newUser);
       } else {
         throw new DuplecatedException(ExceptionMessage.USER_DUPLICATED);

@@ -19,3 +19,7 @@ export const authConstants = {
   accessExpiryTime: 'auth.accessExpiryTime',
   refreshExpiryTime: 'auth.refreshExpiryTime',
 };
+
+export const domainConstants = {
+  user: 'user',
+};
