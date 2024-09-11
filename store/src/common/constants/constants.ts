@@ -15,6 +15,7 @@ export const dbConstants = {
 
 export const authConstants = {
   headerName: 'auth.header',
+  cookie: 'refresh',
   secret: 'auth.secret',
   accessExpiryTime: 'auth.accessExpiryTime',
   refreshExpiryTime: 'auth.refreshExpiryTime',

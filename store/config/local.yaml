@@ -13,6 +13,7 @@ db:
 
 auth:
   header: 'authorization'
+  cookie: 'refresh'
   secret: '5d01dc7f1b7e9fd5881339c956a44c835e48991f8c9d08a7a9d6d559eafa09ef'
   accessExpiryTime: 5m
   refreshExpiryTime: 7d
