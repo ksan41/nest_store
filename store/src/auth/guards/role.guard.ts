@@ -1,8 +1,9 @@
-import { CanActivate, ExecutionContext, Inject, Injectable, UnauthorizedException } from '@nestjs/common';
+import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { ExceptionMessage } from 'src/common/ custom.exceptions';
 import { AuthService } from '../auth.service';
 import { Roles } from 'src/domain/user/e.user.role';
+import { JsonWebTokenError, TokenExpiredError } from '@nestjs/jwt';
 
 @Injectable()
 export class RoleGuard implements CanActivate {
@@ -24,7 +25,12 @@ export class RoleGuard implements CanActivate {
 
       return this.compareRole(payload.role, roles);
     } catch (error) {
-      console.log(error);
+      if (error instanceof TokenExpiredError) {
+        throw new TokenExpiredError(ExceptionMessage.EXPIRED_TOKEN, new Date());
+      }
+      if (error instanceof JsonWebTokenError) {
+        throw new JsonWebTokenError(ExceptionMessage.INVALID_TOKEN, error);
+      }
     }
     return false;
   }
