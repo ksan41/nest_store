@@ -19,6 +19,9 @@ export class IncorrectValueException extends BadRequestException {
 }
 
 export enum ExceptionMessage {
+  INVALID_TOKEN = '잘못된 토큰 형식입니다.',
+  EXPIRED_TOKEN = '만료된 토큰입니다.',
+  EXPIRED_USER_INFO = '만료된 사용자 정보입니다. 다시 로그인해주세요.',
   INVALID_USER_INFO = '사용자 아이디 혹은 비밀번호가 일치하지 않습니다.',
 
   USER_DUPLICATED = '중복된 사용자 아이디 입니다.',

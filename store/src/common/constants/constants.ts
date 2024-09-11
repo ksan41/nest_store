@@ -17,6 +17,7 @@ export const authConstants = {
   headerName: 'auth.header',
   cookie: 'refresh',
   secret: 'auth.secret',
+  prefix: 'auth.prefix',
   accessExpiryTime: 'auth.accessExpiryTime',
   refreshExpiryTime: 'auth.refreshExpiryTime',
 };
