@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { UserModule } from './domain/user/user.module';
 import { CommonModule } from './common/common.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { typeOrmAsyncConfig } from './database/data.source';
+import { typeOrmAsyncConfig } from './config/database/data.source';
 import { ConfigModule } from '@nestjs/config';
 import config from 'config/config';
 import { AuthModule } from './auth/auth.module';
@@ -12,6 +12,7 @@ import { Reflector } from '@nestjs/core';
 import { PermissionGuard } from './auth/guards/permission.guard';
 import { JwtService } from '@nestjs/jwt';
 import { PermissionsEntity } from './auth/entity/permission.entity';
+import { ProductModule } from './domain/product/product.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { PermissionsEntity } from './auth/entity/permission.entity';
     TypeOrmModule.forRootAsync(typeOrmAsyncConfig),
     TypeOrmModule.forFeature([PermissionsEntity]),
     UserModule,
+    ProductModule,
     CommonModule,
     AuthModule,
   ],

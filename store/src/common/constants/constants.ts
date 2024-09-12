@@ -25,3 +25,9 @@ export const authConstants = {
 export const domainConstants = {
   user: 'user',
 };
+
+export const fileConstants = {
+  dest: 'file.dest',
+  fileSize: 'file.fileSize',
+  types: 'file.types',
+};

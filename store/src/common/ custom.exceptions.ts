@@ -28,4 +28,6 @@ export enum ExceptionMessage {
   USER_NOT_FOUND = '사용자 정보를 찾을 수 없었습니다.',
 
   VALUE_IS_EMPTY = '값이 없습니다. (null or undefined)',
+
+  INVALID_FILE_TYPE = '이미지 파일만 업로드 가능합니다.',
 }
