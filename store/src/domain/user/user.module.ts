@@ -8,9 +8,10 @@ import { Base64StringService } from 'src/common/util/base64.string.service';
 import { AuthService } from 'src/auth/auth.service';
 import { JwtService } from '@nestjs/jwt';
 import { PermissionsEntity } from 'src/auth/entity/permission.entity';
+import { GradeEntity } from './entity/grade.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([UserEntity, PermissionsEntity])],
+  imports: [TypeOrmModule.forFeature([UserEntity, PermissionsEntity, GradeEntity])],
   controllers: [UserController],
   providers: [ShaEncryptionService, UserService, Base64StringService, AuthService, JwtService],
   exports: [UserService],

@@ -10,11 +10,13 @@ import { TypeCheck } from 'src/common/util/type.check.service';
 import { Base64StringService } from 'src/common/util/base64.string.service';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
+import { GradeEntity } from '../entity/grade.entity';
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectRepository(UserEntity) private readonly userRepository: Repository<UserEntity>,
+    @InjectRepository(GradeEntity) private readonly gradeRepository: Repository<GradeEntity>,
     private readonly encryptService: ShaEncryptionService,
     private readonly base64Service: Base64StringService,
   ) {}
@@ -24,6 +26,9 @@ export class UserService {
       if (!res) {
         const plainPassword = this.base64Service.decode(newUser.info.password);
         newUser.info.password = this.passwordEncrypt(plainPassword);
+        this.gradeRepository.findOne({ where: { id: newUser.gradeId } }).then(grade => {
+          newUser.grade = grade;
+        });
         this.userRepository.save(newUser);
       } else {
         throw new DuplecatedException(ExceptionMessage.USER_DUPLICATED);

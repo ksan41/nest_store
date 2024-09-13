@@ -8,9 +8,10 @@ import { JwtService } from '@nestjs/jwt';
 import { PermissionsEntity } from './entity/permission.entity';
 import { UserEntity } from 'src/domain/user/entity/user.entity';
 import { AuthService } from './auth.service';
+import { GradeEntity } from 'src/domain/user/entity/grade.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([PermissionsEntity, UserEntity])],
+  imports: [TypeOrmModule.forFeature([PermissionsEntity, UserEntity, GradeEntity])],
   providers: [Base64StringService, ShaEncryptionService, UserService, JwtService, AuthService],
   controllers: [AuthController],
   exports: [],
