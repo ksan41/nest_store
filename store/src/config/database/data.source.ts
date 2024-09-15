@@ -12,7 +12,7 @@ export const getTypeOrmConfig = (configService: ConfigService): TypeOrmModuleOpt
     database: configService.get(dbConstants.database),
     synchronize: configService.get(dbConstants.synchronize),
     logging: configService.get(dbConstants.logging),
-    entities: [__dirname + '/../**/*.entity{.ts,.js}'],
+    entities: [__dirname + '/../../**/*.entity{.ts,.js}'],
   };
 };
 
