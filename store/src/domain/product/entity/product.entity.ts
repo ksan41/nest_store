@@ -1,4 +1,4 @@
-import { Column, Entity, ManyToMany, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { ProductImage } from './product.image.entity';
 import { Category } from './category.entity';
 import { ProductInfo } from '../vo/product.info';
@@ -22,6 +22,7 @@ export class ProductEntity {
   })
   state: ProductState;
 
-  @OneToMany(() => ProductImage, image => image.product)
+  @OneToMany(() => ProductImage, image => image.product, { nullable: true, cascade: ['remove', 'soft-remove'] })
+  @JoinTable()
   images: ProductImage[];
 }

@@ -6,7 +6,7 @@ export class Category {
   @PrimaryGeneratedColumn({ name: 'category_id' })
   id: number;
 
-  @Column({ name: 'parent_id' })
+  @Column({ name: 'parent_id', default: 0 })
   parentId: number;
 
   @Column({ name: 'category_name' })
