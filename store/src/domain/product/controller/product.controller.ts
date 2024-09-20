@@ -1,16 +1,21 @@
-import { Body, Controller, Post, UploadedFiles, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Param, Post, UploadedFiles, UseInterceptors } from '@nestjs/common';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { ProductService } from '../service/product.service';
-import { ConfigService } from '@nestjs/config';
+import { CreateProductDto } from '../dto/create.product.dto';
 
 @Controller('product')
 export class ProductController {
-  constructor(private readonly configService: ConfigService) {}
+  constructor(private readonly productService: ProductService) {}
 
-  @Post('upload')
+  @Post()
+  createProduct(@Body() productDto: CreateProductDto) {
+    return this.productService.createProduct(productDto);
+  }
+
+  @Post('upload/:id')
   @UseInterceptors(FilesInterceptor('files'))
-  uploadFiles(@UploadedFiles() files: Array<Express.Multer.File>) {
-    // console.log(files);
+  uploadFiles(@Param('id') productId: number, @UploadedFiles() files: Array<Express.Multer.File>) {
+    return this.productService.uploadFiles(productId, files);
   }
 
   // 수정

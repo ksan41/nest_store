@@ -29,5 +29,6 @@ export enum ExceptionMessage {
 
   VALUE_IS_EMPTY = '값이 없습니다. (null or undefined)',
 
+  FILE_IS_EMPTY = '첨부된 파일이 없습니다.',
   INVALID_FILE_TYPE = '이미지 파일만 업로드 가능합니다.',
 }
